@@ -14,6 +14,7 @@ export const environment = {
   production: false,
   version: env['npm_package_version'] + '-dev',
   serverUrl: '/api',
+  serverSocketUrl: 'http://localhost:3000',
   defaultLanguage: 'en-US',
   supportedLanguages: ['en-US'],
 };

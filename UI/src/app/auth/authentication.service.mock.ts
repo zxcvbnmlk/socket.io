@@ -8,11 +8,16 @@ export class MockAuthenticationService {
     username: 'test',
     token: '123',
   };
-
+  generateToken() {
+    const rand = function() {
+      return Math.random().toString(36).substring(2); // remove `0.`
+    };
+    return rand() + rand(); // to make it longer
+  }
   login(context: LoginContext): Observable<Credentials> {
     return of({
       username: context.username,
-      token: '123456',
+      token: this.generateToken(),
     });
   }
 

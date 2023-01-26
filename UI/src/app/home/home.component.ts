@@ -1,8 +1,8 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {finalize, takeUntil} from 'rxjs/operators';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { finalize, takeUntil } from 'rxjs/operators';
 import { QuoteService } from './quote.service';
 import { ChatService } from '@app/_service/chat.service';
-import {Subject} from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -16,32 +16,31 @@ export class HomeComponent implements OnInit, OnDestroy {
   newMessage: any;
   socket: any;
   messageList: any = [];
+  credentials: any;
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(private quoteService: QuoteService, private chatService: ChatService) {}
 
   ngOnInit() {
+    this.credentials = this.chatService.credentials
     this.messageList = new Array();
-    this.isLoading = true;
-    this.quoteService
-      .getRandomQuote({ category: 'dev' })
-      .pipe(
-        finalize(() => {
-          this.isLoading = false;
-        })
-      )
-      .subscribe((quote: string) => {
-        this.quote = quote;
+    this.chatService
+      .getNewMessage()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((message: string) => {
+        if (message) {
+          this.messageList.push(message);
+        }
       });
-
-    this.chatService.getNewMessage().pipe(takeUntil(this.destroy$)).subscribe((message: string) => {
-      if (message) {
-        this.messageList.push(message);
-      }
-    });
+    this.chatService.getUsers()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((users: string) => {
+        if (users) {
+          this.users = users;
+        }
+      });
   }
   sendMessage() {
-    console.log('sendMessage', this.messageList);
     this.chatService.sendMessage(this.newMessage);
     this.newMessage = '';
   }

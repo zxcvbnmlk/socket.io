@@ -24,11 +24,18 @@ export class AuthenticationService {
    * @param context The login parameters.
    * @return The user credentials.
    */
+  generateToken() {
+    const rand = function() {
+      return Math.random().toString(36).substring(2); // remove `0.`
+    };
+    return rand() + rand(); // to make it longer
+  }
+
   login(context: LoginContext): Observable<Credentials> {
     // Replace by proper authentication call
     const data = {
       username: context.username,
-      token: '123456',
+      token: this.generateToken(),
     };
     this.credentialsService.setCredentials(data, context.remember);
     return of(data);

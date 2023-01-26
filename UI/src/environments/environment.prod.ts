@@ -10,6 +10,7 @@ export const environment = {
   production: true,
   version: env['npm_package_version'],
   serverUrl: 'https://api.chucknorris.io',
+  serverSocketUrl: 'http://localhost:3000',
   defaultLanguage: 'en-US',
   supportedLanguages: ['en-US'],
 };
