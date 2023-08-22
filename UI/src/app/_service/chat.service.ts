@@ -16,13 +16,10 @@ export class ChatService {
 
   }
 
-
   socket = io(environment.serverSocketUrl, {  query: {
       username: this.credentials.username,
       token: this.credentials.token,
     }});
-
-
 
   public sendMessage(message: any) {
     this.socket.emit('message', message);

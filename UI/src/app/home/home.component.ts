@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {concatMap, finalize, mergeMap, pairwise, take, takeUntil, tap} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import { QuoteService } from './quote.service';
 import { ChatService } from '@app/_service/chat.service';
-import {concatAll, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-home',

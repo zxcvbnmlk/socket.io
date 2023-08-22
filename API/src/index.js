@@ -6,15 +6,6 @@ const http = require('http');
 
 const index = http.Server(app);
 
-
-const { of, fromEvent, Observable} = require('rxjs')
-const {  map, switchMap, mergeMap, takeUntil } = require('rxjs/operators')
-
-
-
-
-
-
 const io = require("socket.io")(index, {
     cors: {
         origin: "http://localhost:4200",
@@ -40,7 +31,6 @@ io.on('connection', (socket) => {
     });
 
 
-
     users = [];
     for (let [id, socket] of io.of("/").sockets) {
         if (!users.find(item => item.username === socket.handshake.query.username
@@ -55,13 +45,9 @@ io.on('connection', (socket) => {
     io.emit("messageAll", msgs);
     io.emit("users", users);
 
-    // msgs.forEach(item=> {
-    //     io.emit('message', item);
-    // })
-
 
     socket.on('disconnect', () => {
-        users = users.filter( item => item.userID !== socket.id);
+        users = users.filter(item => item.userID !== socket.id);
         io.emit("users", users);
     });
 
