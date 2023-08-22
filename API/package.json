@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/socket.io": "^3.0.2",
     "express": "^4.17.1",
-    "socket.io": "^4.5.4"
+    "socket.io": "^4.5.4",
+    "rxjs": "^7.5.0"
   }
 }

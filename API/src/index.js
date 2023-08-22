@@ -2,7 +2,18 @@ const express = require('express')
 const app = express();
 
 const http = require('http');
+
+
 const index = http.Server(app);
+
+
+const { of, fromEvent, Observable} = require('rxjs')
+const {  map, switchMap, mergeMap, takeUntil } = require('rxjs/operators')
+
+
+
+
+
 
 const io = require("socket.io")(index, {
     cors: {
@@ -13,8 +24,10 @@ const io = require("socket.io")(index, {
     }
 });
 const port = process.env.PORT || 3000;
-
+const msgs = [];
+let users = [];
 io.on('connection', (socket) => {
+
     socket.on('message', (message) => {
         const msg = {
             userID: socket.id,
@@ -23,17 +36,28 @@ io.on('connection', (socket) => {
             date: (new Date).toLocaleTimeString()
         }
         io.emit('message', msg);
+        msgs.push(msg)
     });
 
-    let users = [];
+
+
+    users = [];
     for (let [id, socket] of io.of("/").sockets) {
-        users.push({
-            userID: id,
-            username: socket.handshake.query.username,
-            token: socket.handshake.query.token
-        });
+        if (!users.find(item => item.username === socket.handshake.query.username
+        )) {
+            users.push({
+                userID: id,
+                username: socket.handshake.query.username,
+                token: socket.handshake.query.token
+            });
+        }
     }
+    io.emit("messageAll", msgs);
     io.emit("users", users);
+
+    // msgs.forEach(item=> {
+    //     io.emit('message', item);
+    // })
 
 
     socket.on('disconnect', () => {
@@ -46,3 +70,5 @@ io.on('connection', (socket) => {
 index.listen(port, () => {
     console.log(`started on port: ${port}`);
 });
+
+
