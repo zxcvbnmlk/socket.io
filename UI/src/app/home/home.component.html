@@ -34,7 +34,7 @@
             <div class="input-group mb-0">
               <input
                 [(ngModel)]="newMessage"
-                (keyup)="$event.keyCode == 13 && sendMessage()"
+                (keyup)="$event.key === 'Enter' && sendMessage()"
                 type="text"
                 class="form-control"
                 placeholder="Enter text here..."

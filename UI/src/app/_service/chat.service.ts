@@ -1,49 +1,65 @@
-import { Injectable } from '@angular/core';
-import {Subject} from 'rxjs';
-import { io } from 'socket.io-client';
-import { environment } from '@env/environment';
+import {AfterViewInit, ElementRef, Injectable, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Observable, Subject, of, from, fromEvent, switchMap, map} from 'rxjs';
+import {io} from 'socket.io-client';
+import {environment} from '@env/environment';
+import {takeUntil} from "rxjs/operators";
+
 @Injectable({
   providedIn: 'root',
 })
-export class ChatService {
-  public messages$ =  new Subject()
-  public message$: Subject<string> = new Subject();
-  public users$: Subject<string> = new Subject();
+export class ChatService implements OnDestroy {
   public credentials = JSON.parse(localStorage.getItem('credentials') || '{}')
+  private destroy$: Subject<void> = new Subject<void>();
+  constructor() {}
 
-
-  constructor() {
-
-  }
-
-  socket = io(environment.serverSocketUrl, {  query: {
+  socket$ = of(io(environment.serverSocketUrl, {
+    query: {
       username: this.credentials.username,
       token: this.credentials.token,
-    }});
+    }
+  }));
 
   public sendMessage(message: any) {
-    this.socket.emit('message', message);
+    this.socket$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((socket) => {
+      socket.emit('message', message)
+    })
   }
 
   public getUsers = () => {
-    this.socket.on('users', (users) => {
-      this.users$.next(users);
-    });
-    return this.users$.asObservable();
+   return  this.socket$.pipe(
+     switchMap(socket =>
+       fromEvent(socket, 'users').pipe(
+         map(users => (users))
+       )
+     )
+   )
   };
 
 
   public getNewMessage = () => {
-    this.socket.on('message', (message) => {
-      this.message$.next(message);
-    });
-    return this.message$.asObservable();
+    return  this.socket$.pipe(
+      switchMap(socket =>
+        fromEvent(socket, 'message').pipe(
+          map(message => (message))
+        )
+      )
+    )
   };
 
   public getAllMessages = () => {
-    this.socket.on('messageAll', (messages) => {
-      this.messages$.next(messages);
-    });
-    return this.messages$.asObservable()
+    return  this.socket$.pipe(
+      switchMap(socket =>
+        fromEvent(socket, 'messageAll').pipe(
+          map(messages => (messages))
+        )
+      )
+    )
   };
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }
