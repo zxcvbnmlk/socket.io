@@ -1,5 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {takeUntil} from 'rxjs/operators';
+import { QuoteService } from './quote.service';
 import { ChatService } from '@app/_service/chat.service';
 import {Subject} from 'rxjs';
 
@@ -18,7 +19,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   credentials: any;
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private chatService: ChatService) {}
+
+
+  constructor(private quoteService: QuoteService, private chatService: ChatService) {
+
+  }
 
   ngOnInit() {
     this.credentials = this.chatService.credentials
@@ -45,7 +50,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe((messages: any) => {
        this.messageList = messages
       });
+
+
   }
+
+
 
   sendMessage() {
     if ( this.newMessage === '') return;

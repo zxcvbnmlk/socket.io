@@ -1,0 +1,30 @@
+<div class="container">
+  <mat-card>
+    <h1>
+      <mat-card-title translate>GIt Users</mat-card-title>
+    </h1>
+  </mat-card>
+  <br>
+  <br>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-label>Search</mat-label>
+      <input #search matInput type="text" placeholder="Enter text here..." value="">
+    </mat-form-field>
+
+  </form>
+  <div class="git-users">
+    <p>{{err}}</p>
+    <p *ngIf="gitUsers.total_count" class="text-blue">Total count: {{gitUsers.total_count}}</p>
+    <br>
+    <div class="row" *ngFor="let items of gitUsers.items">
+      <mat-card class="example-card">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image"> <img mat-card-avatar [src]="items.avatar_url" alt="avatar"></div>
+          <mat-card-title>{{items.login}} </mat-card-title>
+        </mat-card-header>
+      </mat-card>
+    </div>
+
+  </div>
+</div>
