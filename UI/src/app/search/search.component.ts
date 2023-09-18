@@ -76,7 +76,6 @@ export class SearchComponent implements OnInit, OnDestroy {
       )
       .subscribe((values:any ) => {
         values.items.forEach( (item:any) => this.gitUsers.items.push(item))
-        console.log('this.gitUsers',this.gitUsers);
       });
   }
 

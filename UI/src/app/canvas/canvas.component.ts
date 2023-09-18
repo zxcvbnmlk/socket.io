@@ -28,7 +28,6 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   canvasGo() {
-    console.log(' this.canvas.nativeElement', this.myCanvas)
     const canvas = this.myCanvas.nativeElement
     const ctx = canvas.getContext('2d')
     const rest = canvas.getBoundingClientRect()

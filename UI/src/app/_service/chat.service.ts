@@ -1,15 +1,14 @@
 import {AfterViewInit, ElementRef, Injectable, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Observable, Subject, of, from, fromEvent, switchMap, map} from 'rxjs';
+import {Observable, Subject, of, from, fromEvent, switchMap, map, tap} from 'rxjs';
 import {io} from 'socket.io-client';
 import {environment} from '@env/environment';
-import {takeUntil} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root',
 })
-export class ChatService implements OnDestroy {
+export class ChatService {
   public credentials = JSON.parse(localStorage.getItem('credentials') || '{}')
-  private destroy$: Subject<void> = new Subject<void>();
+
   constructor() {}
 
   socket$ = of(io(environment.serverSocketUrl, {
@@ -20,19 +19,20 @@ export class ChatService implements OnDestroy {
   }));
 
   public sendMessage(message: any) {
-    this.socket$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((socket) => {
-      socket.emit('message', message)
-    })
+    return this.socket$.pipe(map( socket => {
+        socket.emit('message', message)
+      }))
+
   }
 
   public getUsers = () => {
    return  this.socket$.pipe(
-     switchMap(socket =>
-       fromEvent(socket, 'users').pipe(
+     switchMap(socket => {
+       return fromEvent(socket, 'users').pipe(
          map(users => (users))
        )
+       }
+
      )
    )
   };
@@ -57,9 +57,19 @@ export class ChatService implements OnDestroy {
       )
     )
   };
+  public disconnect = () => {
+    return  this.socket$.pipe(
+          map(socket => {
+            socket.disconnect()
+          })
+        )
+  };
+  public connect = () => {
+    return  this.socket$.pipe(
+          map(socket => {
+            socket.connect()
+          })
+        )
+  };
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 }
