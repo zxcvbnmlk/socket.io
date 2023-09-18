@@ -17,7 +17,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {ApiGitHub} from "@app/_models/shell";
 
-const API_GITHUB_TOKEN = new InjectionToken<ApiGitHub>('')
+export const API_GITHUB_TOKEN = new InjectionToken<ApiGitHub>('')
 
 @NgModule({
   imports: [
