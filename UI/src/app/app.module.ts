@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {InjectionToken, NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouteReuseStrategy, RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -15,6 +15,9 @@ import { HomeModule } from './home/home.module';
 import { ShellModule } from './shell/shell.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import {ApiGitHub} from "@app/_models/shell";
+
+const API_GITHUB_TOKEN = new InjectionToken<ApiGitHub>('')
 
 @NgModule({
   imports: [
@@ -34,6 +37,11 @@ import { AppRoutingModule } from './app-routing.module';
   ],
   declarations: [AppComponent],
   providers: [
+    {
+      provide: API_GITHUB_TOKEN,
+      useValue: {ApiGitHub: 'https://api.github.com/'},
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiPrefixInterceptor,

@@ -1,9 +1,8 @@
-import {AfterViewInit, ElementRef, Injectable, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Observable, Subject, of, from, fromEvent, switchMap, map} from 'rxjs';
-import {io} from 'socket.io-client';
-import {environment} from '@env/environment';
-import {takeUntil} from "rxjs/operators";
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {Inject, Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {API_GITHUB_TOKEN} from '@app/app.module'
+import { HttpClient} from '@angular/common/http';
+import {ApiGitHub} from "@app/_models/shell";
 export interface gitUser {
   items: any,
   total_count: number
@@ -15,11 +14,12 @@ export interface gitUser {
 export class ApiService  {
   constructor(
     private http: HttpClient,
+    @Inject(API_GITHUB_TOKEN) private ApiGitHub: ApiGitHub
   ) {}
 
 
   public getGitUsers(data: any): Observable<Object>{
-    return this.http.get(`https://api.github.com/search/users?q=${data.q}&page=${data.page}`)
+    return this.http.get(`${this.ApiGitHub}search/users?q=${data.q}&page=${data.page}`)
   };
 
 

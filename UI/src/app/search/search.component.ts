@@ -58,7 +58,6 @@ export class SearchComponent implements OnInit, OnDestroy {
 
 
   scrollAdd() {
-    console.log('scrollAdd')
     let lastScrollTop: number = 0;
     const stream$: Observable<any> = fromEvent(window, 'scroll', { capture: true })
 
@@ -70,9 +69,6 @@ export class SearchComponent implements OnInit, OnDestroy {
           let clientHeight = document.getElementsByClassName('git-users')[0].clientHeight
           let diff = st - lastScrollTop;
           lastScrollTop = st <= 0 ? 0 : st;
-          console.log('document.offsetHeight;', document.getElementsByClassName('git-users')[0].clientHeight)
-          console.log('document.offsetHeight;', window.pageYOffset)
-          console.log('lastScrollTop', lastScrollTop)
           if (st < clientHeight) {return }
           return diff >= 0 ? 'Down' : 'Up';
         }),
