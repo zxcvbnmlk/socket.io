@@ -19,6 +19,7 @@ export class ApiService  {
 
 
   public getGitUsers(data: any): Observable<Object>{
+    console.log('this.ApiGitHub', this.ApiGitHub)
     return this.http.get(`${this.ApiGitHub}search/users?q=${data.q}&page=${data.page}`)
   };
 

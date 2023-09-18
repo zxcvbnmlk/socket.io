@@ -39,7 +39,7 @@ export const API_GITHUB_TOKEN = new InjectionToken<ApiGitHub>('')
   providers: [
     {
       provide: API_GITHUB_TOKEN,
-      useValue: {ApiGitHub: 'https://api.github.com/'},
+      useValue: 'https://api.github.com/',
       multi: true,
     },
     {

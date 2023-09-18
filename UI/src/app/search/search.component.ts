@@ -3,7 +3,6 @@ import { environment } from '@env/environment';
 import {EMPTY, fromEvent, Observable, Subject} from "rxjs";
 import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from "rxjs/operators";
 import {ApiService} from "@app/_service/api.service";
-import {untilDestroyed} from "@ngneat/until-destroy";
 
 export interface gitUser {
   items: any[],
@@ -17,6 +16,7 @@ export interface gitUser {
 })
 export class SearchComponent implements OnInit, OnDestroy {
   @ViewChild('search',{static:true}) searchInput: any
+  @ViewChild('gitUsersBox',{static:true}) gitUsersBox: any
   version: string | null = environment.version;
   gitUsers: any = [];
   err: string | null = null
@@ -57,22 +57,15 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
 
-  scrollAdd() {
-    let lastScrollTop: number = 0;
-    const stream$: Observable<any> = fromEvent(window, 'scroll', { capture: true })
 
+  scrollAdd() {
+    const stream$: Observable<any> = fromEvent(this.gitUsersBox.nativeElement, 'scroll', { capture: true })
     stream$.pipe(
-        // tap( e => console.log('e',e)),
         debounceTime(1000),
         map( e => {
-          let st = document.documentElement.scrollTop;
-          let clientHeight = document.getElementsByClassName('git-users')[0].clientHeight
-          let diff = st - lastScrollTop;
-          lastScrollTop = st <= 0 ? 0 : st;
-          if (st < clientHeight) {return }
-          return diff >= 0 ? 'Down' : 'Up';
+          return e.target.scrollHeight < e.target.scrollTop+e.target.offsetHeight ? 'atBottom' : ''
         }),
-        filter(e => e==='Down'),
+        filter(e => e==='atBottom'),
         switchMap( e =>  this.apiService.getGitUsers({q:this.searchText,page:this.page + 1}).pipe(
           catchError(err => {
             this.err = err.error.message;

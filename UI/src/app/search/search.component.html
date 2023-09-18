@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container"  >
   <mat-card>
     <h1>
       <mat-card-title translate>GIt Users</mat-card-title>
@@ -13,9 +13,10 @@
     </mat-form-field>
 
   </form>
-  <div class="git-users">
+  <p  class="text-blue">Total count: <span *ngIf="gitUsers.total_count">{{gitUsers.total_count}}</span></p>
+  <div class="git-users" #gitUsersBox >
     <p>{{err}}</p>
-    <p *ngIf="gitUsers.total_count" class="text-blue">Total count: {{gitUsers.total_count}}</p>
+
     <br>
     <div class="row" *ngFor="let items of gitUsers.items">
       <mat-card class="example-card">
