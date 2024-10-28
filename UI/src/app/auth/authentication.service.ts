@@ -25,7 +25,7 @@ export class AuthenticationService {
    * @return The user credentials.
    */
   generateToken() {
-    const rand = function() {
+    const rand = function () {
       return Math.random().toString(36).substring(2); // remove `0.`
     };
     return rand() + rand(); // to make it longer

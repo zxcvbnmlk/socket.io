@@ -30,7 +30,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.credentials = this.chatService.credentials
     this.messageList = [];
     this.connect();
-    this.chatService.getUsers()
+    this.chatService
+      .getUsers()
       .pipe(takeUntil(this.destroy$))
       .subscribe((users: string) => {
         if (users) {
@@ -38,7 +39,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.chatService.getNewMessage()
+    this.chatService
+      .getNewMessage()
       .pipe(takeUntil(this.destroy$))
       .subscribe((message: any) => {
         if (message) {
@@ -46,12 +48,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.chatService.getAllMessages()
-      .pipe(
-        takeUntil(this.destroy$)
-        )
+    this.chatService
+      .getAllMessages()
+      .pipe(takeUntil(this.destroy$))
       .subscribe((messages: any) => {
-       this.messageList = messages
+        this.messageList = messages;
       });
 
 
@@ -60,31 +61,28 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   sendMessage() {
-    if ( this.newMessage === '') return;
-    this.chatService.sendMessage(this.newMessage).pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-
-    });
+    if (this.newMessage === '') return;
+    this.chatService
+      .sendMessage(this.newMessage)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {});
     this.newMessage = '';
   }
   disconnect() {
-    this.chatService.disconnect().pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-
-    });
+    this.chatService
+      .disconnect()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {});
   }
   connect() {
-    this.chatService.connect().pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-
-    });
+    this.chatService
+      .connect()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {});
   }
 
   ngOnDestroy(): void {
-    this.disconnect()
+    this.disconnect();
     this.destroy$.next();
     this.destroy$.complete();
   }

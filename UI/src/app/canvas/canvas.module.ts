@@ -6,10 +6,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from '@app/material.module';
 import { CanvasRoutingModule } from './canvas-routing.module';
 import { CanvasComponent } from './canvas.component';
-import {FormsModule} from "@angular/forms";
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-    imports: [CommonModule, TranslateModule, FlexLayoutModule, MaterialModule, CanvasRoutingModule, FormsModule],
+  imports: [CommonModule, TranslateModule, FlexLayoutModule, MaterialModule, CanvasRoutingModule, FormsModule],
   declarations: [CanvasComponent],
 })
 export class CanvasModule {}

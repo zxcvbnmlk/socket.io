@@ -21,6 +21,4 @@ describe('AboutComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
-
 });

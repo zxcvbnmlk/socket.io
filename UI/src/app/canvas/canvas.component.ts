@@ -1,8 +1,16 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { environment } from '@env/environment';
-import {fromEvent, pairwise, Subject} from "rxjs";
-import {map, switchMap, takeUntil} from "rxjs/operators";
-import {ApiService} from "@app/_service/api.service";
+import {fromEvent, Observable, pairwise, Subject} from 'rxjs';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { ApiService } from '@app/_service/api.service';
 
 @Component({
   selector: 'app-search',
@@ -10,11 +18,11 @@ import {ApiService} from "@app/_service/api.service";
   styleUrls: ['./canvas.component.scss'],
 })
 export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('myCanvas',{static:true})
+  @ViewChild('myCanvas', { static: true })
   myCanvas: ElementRef = {} as ElementRef;
   version: string | null = environment.version;
   gitUsers: any = [];
-  err: string | null = null
+  err: string | null = null;
   private destroy$: Subject<void> = new Subject<void>();
   range: number = 2;
   color: string = '#c22d2d';
@@ -23,45 +31,53 @@ export class CanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.canvasGo();
   }
-  ngAfterViewInit(): void {
+  ngAfterViewInit(): void {}
+  formatNumber(item: any) {
+    if (typeof item === 'string') {
+      return Number(item.replace(',', '.'));
 
+    } else {
+      return item.toString().replace('.', ',');
+    }
   }
-
   canvasGo() {
-    const canvas = this.myCanvas.nativeElement
-    const ctx = canvas.getContext('2d')
-    const rest = canvas.getBoundingClientRect()
-    const scale = window.devicePixelRatio
+    const canvas = this.myCanvas.nativeElement;
+    const ctx = canvas.getContext('2d');
+    const rest = canvas.getBoundingClientRect();
+    const scale = window.devicePixelRatio;
 
-    canvas.width = rest.width * scale
-    canvas.height = rest.height * scale
-    ctx.scale(scale,scale)
+    canvas.width = rest.width * scale;
+    canvas.height = rest.height * scale;
+    ctx.scale(scale, scale);
 
-    const mousemove$ = fromEvent(canvas, 'mousemove')
-    const mousedown$ = fromEvent(canvas, 'mousedown')
-    const mouseup$ = fromEvent(canvas, 'mouseup')
-    const mouseout$ = fromEvent(canvas, 'mouseout')
+    const mousemove$ = fromEvent(canvas, 'mousemove');
+    const mousedown$ = fromEvent(canvas, 'mousedown');
+    const mouseup$ = fromEvent(canvas, 'mouseup');
+    const mouseout$ = fromEvent(canvas, 'mouseout');
 
-    mousedown$.pipe(
-      switchMap( e => mousemove$.pipe(
-        map( (e:any) => ({
-            x: e.offsetX,
-            y: e.offsetY,
-          })
+    mousedown$
+      .pipe(
+        switchMap((e) =>
+          mousemove$.pipe(
+            map((e: any) => ({
+              x: e.offsetX,
+              y: e.offsetY,
+            })),
+            pairwise(),
+            takeUntil(mouseup$),
+            takeUntil(mouseout$)
+          )
         ),
-        pairwise(),
-        takeUntil(mouseup$),
-        takeUntil(mouseout$)
-      )),
-      takeUntil(this.destroy$)
-    ).subscribe( ([from,to]) => {
-      ctx.strokeStyle = this.color;
-      ctx.lineWidth = this.range;
-      ctx.beginPath(); // Начинает новый путь
-      ctx.moveTo(from.x, from.y); // Передвигает перо в точку
-      ctx.lineTo(to.x, to.y); // Рисует линию до точки
-      ctx.stroke(); // Отображает путь
-    })
+        takeUntil(this.destroy$)
+      )
+      .subscribe(([from, to]) => {
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = this.range;
+        ctx.beginPath(); // Начинает новый путь
+        ctx.moveTo(from.x, from.y); // Передвигает перо в точку
+        ctx.lineTo(to.x, to.y); // Рисует линию до точки
+        ctx.stroke(); // Отображает путь
+      });
   }
 
   ngOnDestroy(): void {

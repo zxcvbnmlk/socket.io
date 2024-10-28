@@ -6,6 +6,5 @@ export interface menuItems {
 }
 
 export interface ApiGitHub {
-  ApiGitHub: string
-
+  ApiGitHub: string;
 }

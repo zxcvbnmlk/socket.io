@@ -8,8 +8,8 @@
   <div fxHide.lt-md>
     <a class="brand" href="https://github.com/ngx-rocket" translate>APP_NAME</a>
     <button mat-button *ngFor="let item of menuItems" [routerLink]="item.link" routerLinkActive="active">
-      <mat-icon>{{item.icon}}</mat-icon>
-      <span translate>{{item.title}}</span>
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span translate>{{ item.title }}</span>
     </button>
   </div>
   <span fxFlex></span>
