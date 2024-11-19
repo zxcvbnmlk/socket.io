@@ -10,15 +10,14 @@ export interface ApiGitHub {
 }
 
 export interface credentials {
-  username: string,
-  token: string
+  username: string;
+  token: string;
 }
 
-export interface users extends credentials{
-  userID: string
+export interface users extends credentials {
+  userID: string;
 }
-export interface message extends credentials{
-  date: string,
-  text: string
+export interface message extends credentials {
+  date: string;
+  text: string;
 }
-

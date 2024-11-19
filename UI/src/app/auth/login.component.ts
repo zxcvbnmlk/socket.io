@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
-
+import { credentials } from '@app/_models/shell';
 import { environment } from '@env/environment';
 import { Logger, UntilDestroy, untilDestroyed } from '@shared';
 import { AuthenticationService } from './authentication.service';
@@ -30,9 +30,22 @@ export class LoginComponent implements OnInit {
     this.createForm();
   }
 
-  ngOnInit() {}
-
+  ngOnInit() {
+    if (this.checkAuth()) {
+      this.router.navigate([this.route.snapshot.queryParams['redirect'] || '/'], { replaceUrl: true });
+      return;
+    }
+  }
+  //toDo create checkAuth service
+  checkAuth() {
+    const credentials = localStorage.getItem('credentials');
+    return !!credentials;
+  }
   login() {
+    if (this.checkAuth()) {
+      location.reload();
+      return;
+    }
     this.isLoading = true;
     const login$ = this.authenticationService.login(this.loginForm.value);
     login$

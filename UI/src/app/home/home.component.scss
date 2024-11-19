@@ -77,6 +77,11 @@ body {
 
 .people-list .chat-list li .name {
   font-size: 15px;
+  width: 100px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: left;
+  padding: 5px;
 }
 
 .people-list .chat-list img {
@@ -266,8 +271,6 @@ body {
     overflow-x: auto;
   }
 }
-
-
 
 .mb-0,
 .my-0 {

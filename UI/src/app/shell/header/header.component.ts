@@ -13,15 +13,13 @@ import { AuthenticationService, CredentialsService } from '@app/auth';
 export class HeaderComponent implements OnInit {
   @Input() sidenav!: MatSidenav;
 
-  menuItems: menuItems[] = [
-    { name: 'home', title: 'home', icon: 'home', link: '/home' },
-  ];
+  menuItems: menuItems[] = [{ name: 'home', title: 'home', icon: 'home', link: '/home' }];
 
   constructor(
     private router: Router,
     private titleService: Title,
     private authenticationService: AuthenticationService,
-    private credentialsService: CredentialsService,
+    private credentialsService: CredentialsService
   ) {}
 
   ngOnInit() {}
