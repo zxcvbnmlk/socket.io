@@ -47,7 +47,7 @@ io.on('connection', (socket) => {
 
 
     socket.on('disconnect', () => {
-        users = users.filter(item => item.userID !== socket.id);
+        users = users.filter(item => item.token !== socket.handshake.query.token);
         io.emit("users", users);
     });
 

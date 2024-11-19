@@ -38,7 +38,7 @@ export class ChatService {
     this.getSocket().disconnect();
   };
   public connect = () => {
-    const credentials = JSON.parse(localStorage.getItem('credentials') || '');
+    const credentials = JSON.parse(localStorage.getItem('credentials') || '{}');
     this.socket = io(environment.serverSocketUrl, {
       query: {
         username: credentials.username,

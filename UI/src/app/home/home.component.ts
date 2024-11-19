@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   users: users[] = [];
   newMessage: string | undefined;
   messageList: message[] = [];
-  credentials: credentials = JSON.parse(localStorage.getItem('credentials') || '');
+  credentials: credentials = JSON.parse(localStorage.getItem('credentials') || '{}');
   private destroy$: Subject<void> = new Subject<void>();
 
 
