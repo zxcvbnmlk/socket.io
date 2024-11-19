@@ -18,10 +18,10 @@ const port = process.env.PORT || 3000;
 const msgs = [];
 let users = [];
 io.on('connection', (socket) => {
-
+    socket.join("room1");
     socket.on('message', (message) => {
         const msg = {
-            userID: socket.id,
+            token: socket.handshake.query.token,
             username: socket.handshake.query.username,
             text: message,
             date: (new Date).toLocaleTimeString()

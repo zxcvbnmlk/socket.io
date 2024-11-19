@@ -1,60 +1,50 @@
-import { AfterViewInit, ElementRef, Injectable, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Observable, Subject, of, from, fromEvent, switchMap, map, tap } from 'rxjs';
-import { io } from 'socket.io-client';
+import {Injectable} from '@angular/core';
+import {fromEvent, Observable} from 'rxjs';
+import { io, Socket } from 'socket.io-client';
 import { environment } from '@env/environment';
-
+import {message, users} from "@app/_models/shell";
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
-  public credentials = JSON.parse(localStorage.getItem('credentials') || '{}');
+  private socket: Socket | undefined;
 
-  constructor() {}
-
-  socket$ = of(
-    io(environment.serverSocketUrl, {
-      query: {
-        username: this.credentials.username,
-        token: this.credentials.token,
-      },
-    })
-  );
-
-  public sendMessage(message: any) {
-    return this.socket$.pipe(
-      map((socket) => {
-        socket.emit('message', message);
-      })
-    );
+  constructor() {
+  }
+  getSocket(): Socket {
+    if (!this.socket) {
+      throw new Error('Socket is not initialized')
+    }
+    return this.socket
   }
 
-  public getUsers = () => {
-    return this.socket$.pipe(
-      switchMap((socket) => {
-        return fromEvent(socket, 'users').pipe(map((users) => users));
-      })
-    );
+  public sendMessage(message: string) {
+    this.getSocket().emit('message', message);
+  }
+
+  public getUsers(): Observable<users[]> {
+    return fromEvent<users[]>(this.getSocket(), 'users');
   };
 
-  public getNewMessage = () => {
-    return this.socket$.pipe(switchMap((socket) => fromEvent(socket, 'message').pipe(map((message) => message))));
+  public getNewMessage(): Observable<message> {
+    return fromEvent(this.getSocket(), 'message');
   };
 
-  public getAllMessages = () => {
-    return this.socket$.pipe(switchMap((socket) => fromEvent(socket, 'messageAll').pipe(map((messages) => messages))));
+  public getAllMessages(): Observable<message[]>  {
+    return fromEvent<message[]>(this.getSocket(), 'messageAll');
   };
+
   public disconnect = () => {
-    return this.socket$.pipe(
-      map((socket) => {
-        socket.disconnect();
-      })
-    );
+    this.getSocket().disconnect();
   };
   public connect = () => {
-    return this.socket$.pipe(
-      map((socket) => {
-        socket.connect();
-      })
-    );
+    const credentials = JSON.parse(localStorage.getItem('credentials') || '');
+    this.socket = io(environment.serverSocketUrl, {
+      query: {
+        username: credentials.username,
+        token: credentials.token,
+      },
+    });
+    this.getSocket().connect();
   };
 }

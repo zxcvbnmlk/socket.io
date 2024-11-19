@@ -15,15 +15,13 @@ export class HeaderComponent implements OnInit {
 
   menuItems: menuItems[] = [
     { name: 'home', title: 'home', icon: 'home', link: '/home' },
-    { name: 'search', title: 'search', icon: 'search', link: '/search' },
-    { name: 'canvas', title: 'canvas', icon: 'edit', link: '/canvas' }
   ];
 
   constructor(
     private router: Router,
     private titleService: Title,
     private authenticationService: AuthenticationService,
-    private credentialsService: CredentialsService
+    private credentialsService: CredentialsService,
   ) {}
 
   ngOnInit() {}
