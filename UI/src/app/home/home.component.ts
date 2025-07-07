@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { ChatService } from '@app/_service/chat.service';
 import { Subject } from 'rxjs';
-import { credentials, message, users } from '@app/_models/shell';
+import { Credentials, Message, Users } from '@app/_models/shell';
 import { AuthenticationService } from '@app/auth';
 import { Router } from '@angular/router';
 
@@ -12,12 +12,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  quote: string | undefined;
-  isLoading: boolean = false;
-  users: users[] = [];
+  users: Users[] = [];
   newMessage: string | undefined;
-  messageList: message[] = [];
-  credentials: credentials = JSON.parse(localStorage.getItem('credentials') || '{}');
+  messageList: Message[] = [];
+  credentials: Credentials = JSON.parse(localStorage.getItem('credentials') || '{}');
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
@@ -31,7 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.chatService
       .getUsers()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((users: users[]) => {
+      .subscribe((users: Users[]) => {
         if (!users.find((item) => item.token === this.credentials.token)) {
           this.authenticationService.logout().subscribe(() => this.router.navigate(['/login'], { replaceUrl: true }));
         }
@@ -42,7 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.chatService
       .getNewMessage()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((message: message) => {
+      .subscribe((message: Message) => {
         if (message) {
           this.messageList.push(message);
         }
@@ -51,7 +49,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.chatService
       .getAllMessages()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((messages: message[]) => {
+      .subscribe((messages: Message[]) => {
         this.messageList = messages;
       });
   }

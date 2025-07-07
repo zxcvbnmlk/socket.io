@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { fromEvent, Observable } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import { environment } from '@env/environment';
-import { message, users } from '@app/_models/shell';
+import { Message, Users } from '@app/_models/shell';
 @Injectable({
   providedIn: 'root',
 })
@@ -21,16 +21,16 @@ export class ChatService {
     this.getSocket().emit('message', message);
   }
 
-  public getUsers(): Observable<users[]> {
-    return fromEvent<users[]>(this.getSocket(), 'users');
+  public getUsers(): Observable<Users[]> {
+    return fromEvent<Users[]>(this.getSocket(), 'users');
   }
 
-  public getNewMessage(): Observable<message> {
+  public getNewMessage(): Observable<Message> {
     return fromEvent(this.getSocket(), 'message');
   }
 
-  public getAllMessages(): Observable<message[]> {
-    return fromEvent<message[]>(this.getSocket(), 'messageAll');
+  public getAllMessages(): Observable<Message[]> {
+    return fromEvent<Message[]>(this.getSocket(), 'messageAll');
   }
 
   public disconnect = () => {

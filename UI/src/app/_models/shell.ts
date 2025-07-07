@@ -1,4 +1,4 @@
-export interface menuItems {
+export interface MenuItems {
   name: string;
   title: string;
   icon: string;
@@ -9,15 +9,15 @@ export interface ApiGitHub {
   ApiGitHub: string;
 }
 
-export interface credentials {
+export interface Credentials {
   username: string;
   token: string;
 }
 
-export interface users extends credentials {
+export interface Users extends Credentials {
   userID: string;
 }
-export interface message extends credentials {
+export interface Message extends Credentials {
   date: string;
   text: string;
 }

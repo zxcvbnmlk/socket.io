@@ -2,7 +2,7 @@ import { Title } from '@angular/platform-browser';
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
-import { menuItems } from '@app/_models/shell';
+import { MenuItems } from '@app/_models/shell';
 import { AuthenticationService, CredentialsService } from '@app/auth';
 
 @Component({
@@ -13,7 +13,7 @@ import { AuthenticationService, CredentialsService } from '@app/auth';
 export class HeaderComponent implements OnInit {
   @Input() sidenav!: MatSidenav;
 
-  menuItems: menuItems[] = [
+  menuItems: MenuItems[] = [
     { name: 'home', title: 'home', icon: 'home', link: '/home' },
     { name: 'search', title: 'search', icon: 'search', link: '/search' },
     { name: 'canvas', title: 'canvas', icon: 'edit', link: '/canvas' }

@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Credentials} from '@app/_models/shell';
 
-export interface Credentials {
-  // Customize received credentials here
-  username: string;
-  token: string;
-}
 
 const credentialsKey = 'credentials';
 
