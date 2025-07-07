@@ -13,7 +13,11 @@ import { AuthenticationService, CredentialsService } from '@app/auth';
 export class HeaderComponent implements OnInit {
   @Input() sidenav!: MatSidenav;
 
-  menuItems: menuItems[] = [{ name: 'home', title: 'home', icon: 'home', link: '/home' }];
+  menuItems: menuItems[] = [
+    { name: 'home', title: 'home', icon: 'home', link: '/home' },
+    { name: 'search', title: 'search', icon: 'search', link: '/search' },
+    { name: 'canvas', title: 'canvas', icon: 'edit', link: '/canvas' }
+  ];
 
   constructor(
     private router: Router,
